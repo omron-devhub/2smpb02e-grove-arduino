@@ -17,6 +17,12 @@ Installation this library on Arduino IDE.
 ## How to use
 see examples/sample.ino
 
+## Contributors
+[@akita11](https://github.com/akita11) has contributed as the basis of this project.  
+
+and more [contributors](https://github.com/omron-devhub/d6t-grove-arduino/graphs/contributors) .  
+Thank you to all our contributors!
+
 ## Licence
 The files (number.c, number.h and bcconfig.h) from the "bc" program included in this repository are licensed under the GPL license.
 
