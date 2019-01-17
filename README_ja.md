@@ -7,7 +7,7 @@
 
 ## 言語
 - [英語](./README.md)
-- [日本語](./README_ja.md)
+- [日本語](./README_ja.md)
 
 ## インストール方法
 このライブラリはArduino IDEにインストールしてください。
@@ -16,6 +16,12 @@
 
 ## 使い方
 examples / sample.inoを参照してください。
+
+## Contributors
+まず、このプロジェクトのベースは [@akita11](https://github.com/akita11) にご協力いただきました。  
+
+そしてリポジトリ公開後にContributeしていただいた方は[こちら](https://github.com/omron-devhub/d6t-grove-arduino/graphs/contributors)です。  
+私たちはすべてのContributorに感謝します！
 
 ## ライセンス
 このリポジトリに含まれる "bc"プログラムのファイル（number.c、number.hおよびbcconfig.h）は、GPLライセンスの下でライセンスされています。  
