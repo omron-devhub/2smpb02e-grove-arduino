@@ -1,3 +1,6 @@
+// Arduion Library for Omron 2SMPB02E
+// 2019/1/16: akita11 (akita@ifdl.jp)
+
 #include <Arduino.h>
 #include <Omron2SMPB02E.h>
 #include <Wire.h>

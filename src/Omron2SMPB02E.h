@@ -1,3 +1,6 @@
+// Arduion Library for Omron 2SMPB02E
+// 2019/1/16: akita11 (akita@ifdl.jp)
+
 #ifndef Omron2SMPB02E_h
 #define Omron2SMPB02E_h
 
