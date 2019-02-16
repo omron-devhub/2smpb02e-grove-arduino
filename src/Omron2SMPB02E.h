@@ -8,10 +8,6 @@
 
 #include "Arduino.h"
 
-#define MODE_SLEEP  0
-#define MODE_FORCE  1
-#define MODE_NORMAL 2
-
 // registers
 #define TEMP_TXD0 0xfc
 #define TEMP_TXD1 0xfb
@@ -123,7 +119,7 @@ class Omron2SMPB02E
   long read_raw_pressure();
   BigNumber conv_K0(int x, BigNumber a, BigNumber s);
   BigNumber conv_K1(long x);
-  
+
  public:
   Omron2SMPB02E(uint8_t SDO = 1);
   void begin();
