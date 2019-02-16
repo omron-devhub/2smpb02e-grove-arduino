@@ -33,10 +33,10 @@ int Omron2SMPB02E::read_reg16(uint8_t addr)
   uint16_t d = (read_reg(addr) << 8) | read_reg(addr + 1); // [@(addr):@(addr+1)]
   return(-(d & 0b1000000000000000) | (d & 0b0111111111111111)); // 2's complement
   return(d);
-  
+
 }
 
-Omron2SMPB02E::Omron2SMPB02E(uint8_t SDO = 1)
+Omron2SMPB02E::Omron2SMPB02E(uint8_t SDO)
 {
   i2c_addr = 0x56;
   if (SDO == 0) i2c_addr = 0x70;
@@ -59,7 +59,7 @@ void Omron2SMPB02E::begin()
   BigNumber::begin(20);
   Wire.begin();
   write_reg(IO_SETUP, 0x00); // IO_SETUP
-  /* 
+  /*
   uint32_t coe_b00_a0_ex = (uint32_t)read_reg(COE_b00_a0_ex);
   a0 = ((uint32_t)read_reg(COE_a0_1) << 12) | ((uint32_t)read_reg(COE_a0_0) << 4) | ((uint32_t)coe_b00_a0_ex & 0x0000000f);
   a0 = -(a0 & (uint32_t)1 << 19) + (a0 & ~((uint32_t)1 << 19)); // 2's complement
@@ -103,7 +103,7 @@ float Omron2SMPB02E::read_temp()
 
 BigNumber Omron2SMPB02E::read_calc_temp()
 {
-  // Tr = a0 + a1 * Dt + a2 * Dt^2 
+  // Tr = a0 + a1 * Dt + a2 * Dt^2
   // -> temp = Re / 256 [degC]
   //   Dt : raw temperature value from TEMP_TXDx reg.
 
@@ -209,4 +209,3 @@ void Omron2SMPB02E::set_filter(uint8_t mode)
 {
   write_reg(IIR_CNT, mode);
 }
-
