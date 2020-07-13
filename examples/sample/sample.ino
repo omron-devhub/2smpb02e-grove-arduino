@@ -9,6 +9,8 @@ void setup()
   Serial.begin(9600);
   prs.set_mode(MODE_NORMAL);
   delay(300);
+  prs.read_all_coe();
+  delay(300);
 }
 
 void loop()
