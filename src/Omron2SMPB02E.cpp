@@ -129,12 +129,15 @@ BigNumber Omron2SMPB02E::read_calc_temp()
   sprintf(dt, "%ld", read_raw_temp());
   BigNumber Bdt = (BigNumber)dt;
   long a0;
-  a0 = ((uint32_t)read_reg(COE_a0_1) << 12) | ((uint32_t)read_reg(COE_a0_0) << 4) | ((uint32_t)read_reg(COE_b00_a0_ex) & 0x0000000f);
+  // a0 = ((uint32_t)read_reg(COE_a0_1) << 12) | ((uint32_t)read_reg(COE_a0_0) << 4) | ((uint32_t)read_reg(COE_b00_a0_ex) & 0x0000000f);
+  a0 = ((uint32_t)uint8_COE_a0_1 << 12) | ((uint32_t)uint8_COE_a0_0 << 4) | ((uint32_t)uint8_COE_b00_a0_ex & 0x0000000f);
   a0 = -(a0 & (uint32_t)1 << 19) + (a0 & ~((uint32_t)1 << 19)); // 2's complement
 
   BigNumber temp = conv_K1(a0)
-    + (conv_K0(read_reg16(COE_a1), (BigNumber)A_a1, (BigNumber)S_a1)
-       + conv_K0(read_reg16(COE_a2), (BigNumber)A_a2, (BigNumber)S_a2) * Bdt) * Bdt;
+    + (conv_K0(int_COE_a1, (BigNumber)A_a1, (BigNumber)S_a1)
+       + conv_K0(int_COE_a2, (BigNumber)A_a2, (BigNumber)S_a2) * Bdt) * Bdt;
+    // + (conv_K0(read_reg16(COE_a1), (BigNumber)A_a1, (BigNumber)S_a1)
+    //    + conv_K0(read_reg16(COE_a2), (BigNumber)A_a2, (BigNumber)S_a2) * Bdt) * Bdt;
   return(temp);
 }
 
@@ -147,7 +150,8 @@ float Omron2SMPB02E::read_pressure()
   //   Tr : raw temperature from TEMP_TXDx reg.
   //   Dp : raw pressure from PRESS_TXDx reg.
   BigNumber Bprs;
-  long b00 =((uint32_t)read_reg(COE_b00_1) << 12) | ((uint32_t)read_reg(COE_b00_0) << 4) | ((uint32_t)read_reg(COE_b00_a0_ex) >> 4);
+  // long b00 =((uint32_t)read_reg(COE_b00_1) << 12) | ((uint32_t)read_reg(COE_b00_0) << 4) | ((uint32_t)read_reg(COE_b00_a0_ex) >> 4);
+  long b00 =((uint32_t)uint8_COE_b00_1 << 12) | ((uint32_t)uint8_COE_b00_0 << 4) | ((uint32_t)uint8_COE_b00_a0_ex >> 4);
 
   char dp[10];
   sprintf(dp, "%ld", read_raw_pressure());
@@ -170,15 +174,24 @@ float Omron2SMPB02E::read_pressure()
   BigNumber w;
   BigNumber w2;
   Bprs = conv_K1(b00);
-  w = conv_K0(read_reg16(COE_bt1), (BigNumber)A_bt1, (BigNumber)S_bt1);
-  w += conv_K0(read_reg16(COE_b11), (BigNumber)A_b11, (BigNumber)S_b11) * Bdp;
-  w += Btr * (conv_K0(read_reg16(COE_bt2), (BigNumber)A_bt2, (BigNumber)S_bt2)
-	      + conv_K0(read_reg16(COE_b12), (BigNumber)A_b12, (BigNumber)S_b12) * Bdp);
+  w = conv_K0(int_COE_bt1, (BigNumber)A_bt1, (BigNumber)S_bt1);
+  w += conv_K0(int_COE_b11, (BigNumber)A_b11, (BigNumber)S_b11) * Bdp;
+  w += Btr * (conv_K0(int_COE_bt2, (BigNumber)A_bt2, (BigNumber)S_bt2)
+	      + conv_K0(int_COE_b12, (BigNumber)A_b12, (BigNumber)S_b12) * Bdp);
+  // w = conv_K0(read_reg16(COE_bt1), (BigNumber)A_bt1, (BigNumber)S_bt1);
+  // w += conv_K0(read_reg16(COE_b11), (BigNumber)A_b11, (BigNumber)S_b11) * Bdp;
+  // w += Btr * (conv_K0(read_reg16(COE_bt2), (BigNumber)A_bt2, (BigNumber)S_bt2)
+	//       + conv_K0(read_reg16(COE_b12), (BigNumber)A_b12, (BigNumber)S_b12) * Bdp);
+  
   Bprs += Btr * w;
-  w = conv_K0(read_reg16(COE_bp1), (BigNumber)A_bp1, (BigNumber)S_bp1);
-  w2 = conv_K0(read_reg16(COE_bp2), (BigNumber)A_bp2, (BigNumber)S_bp2);
-  w2 += conv_K0(read_reg16(COE_b21), (BigNumber)A_b21, (BigNumber)S_b21) * Btr;
-  w2 += conv_K0(read_reg16(COE_bp3), (BigNumber)A_bp3, (BigNumber)S_bp3) * Bdp;
+  w = conv_K0(int_COE_bp1, (BigNumber)A_bp1, (BigNumber)S_bp1);
+  w2 = conv_K0(int_COE_bp2, (BigNumber)A_bp2, (BigNumber)S_bp2);
+  w2 += conv_K0(int_COE_b21, (BigNumber)A_b21, (BigNumber)S_b21) * Btr;
+  w2 += conv_K0(int_COE_bp3, (BigNumber)A_bp3, (BigNumber)S_bp3) * Bdp;
+  // w = conv_K0(read_reg16(COE_bp1), (BigNumber)A_bp1, (BigNumber)S_bp1);
+  // w2 = conv_K0(read_reg16(COE_bp2), (BigNumber)A_bp2, (BigNumber)S_bp2);
+  // w2 += conv_K0(read_reg16(COE_b21), (BigNumber)A_b21, (BigNumber)S_b21) * Btr;
+  // w2 += conv_K0(read_reg16(COE_bp3), (BigNumber)A_bp3, (BigNumber)S_bp3) * Bdp;
   w += Bdp * w2;
   Bprs += Bdp * w;
   return((float)(Bprs * (BigNumber)10000) / 10000.0);
@@ -210,3 +223,24 @@ void Omron2SMPB02E::set_filter(uint8_t mode)
   write_reg(IIR_CNT, mode);
 }
 
+void Omron2SMPB02E::read_all_coe()
+{
+  // for press
+  uint8_COE_b00_1 = read_reg(COE_b00_1);
+  uint8_COE_b00_0 = read_reg(COE_b00_0);
+  uint8_COE_b00_a0_ex = read_reg(COE_b00_a0_ex);
+  int_COE_bt1 = read_reg16(COE_bt1);
+  int_COE_b11 = read_reg16(COE_b11);
+  int_COE_bt2 = read_reg16(COE_bt2);
+  int_COE_b12 = read_reg16(COE_b12);
+  int_COE_bp1 = read_reg16(COE_bp1);
+  int_COE_bp2 = read_reg16(COE_bp2);
+  int_COE_b21 = read_reg16(COE_b21);
+  int_COE_bp3 = read_reg16(COE_bp3);
+
+  // for temp
+  uint8_COE_a0_1 = read_reg(COE_a0_1);
+  uint8_COE_a0_0 = read_reg(COE_a0_0);
+  int_COE_a1 = read_reg16(COE_a1);
+  int_COE_a2 = read_reg16(COE_a2);
+}

@@ -123,6 +123,26 @@ class Omron2SMPB02E
   long read_raw_pressure();
   BigNumber conv_K0(int x, BigNumber a, BigNumber s);
   BigNumber conv_K1(long x);
+
+  // COE values
+  // for read_pressure
+  uint8_t uint8_COE_b00_1;
+  uint8_t uint8_COE_b00_0;
+  uint8_t uint8_COE_b00_a0_ex;
+  int int_COE_bt1;
+  int int_COE_b11;
+  int int_COE_bt2;
+  int int_COE_b12;
+  int int_COE_bp1;
+  int int_COE_bp2;
+  int int_COE_b21;
+  int int_COE_bp3;
+  
+  // for read_calc_temp
+  uint8_t uint8_COE_a0_1;
+  uint8_t uint8_COE_a0_0;
+  int int_COE_a1;
+  int int_COE_a2;
   
  public:
   Omron2SMPB02E(uint8_t SDO = 1);
@@ -137,5 +157,7 @@ class Omron2SMPB02E
   void set_average(uint8_t temp_avg, uint8_t pressure_avg);
   uint8_t is_busy();
   void set_filter(uint8_t mode);
+
+  void read_all_coe(); // call once 
 };
 #endif
